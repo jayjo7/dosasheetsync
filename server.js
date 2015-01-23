@@ -7,7 +7,7 @@ var express = require('express'),
 var app = express();
 var collectionDriver;
 app.set('port', process.env.PORT || 3000);
-app.set('mongodb_url', process.MONGO_URL || "mongodb://fifthdonut:fifthdonut123@ds039950.mongolab.com:39950/dosaexpress");
+app.set('mongodb_url', process.MONGO_URL || "mongodb://dosaexpress:dosaexpress123@ds039950.mongolab.com:39950/dosaexpress");
 app.set('sheet_uniqueid_column_name', process.SHEET_UNIQUEID_COLUMN_NAME || "UniqueId");
 
 app.use(bodyParser.json());
@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 MongoClient.connect(app.get('mongodb_url'), {native_parser:true}, function(err, db) 
   	{
   		if(err)
-  		{
+  		{  console.log(err);
   			console.log("Trouble connecting to the database ...");
   		}
   		else
