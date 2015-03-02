@@ -46,7 +46,7 @@ CollectionDriver.prototype.getOneByGivenCriteria = function(collectionName, sear
                //     }
           //  });
         
-   // });
+    });
 }
 
 
