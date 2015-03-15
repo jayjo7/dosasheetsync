@@ -49,14 +49,30 @@ app.put('/sheetSync', function(req, res)
 		var data= req.body[key];
 
 		console.log( "Number of records received = " + data.length);
+
+
 		
 
 		for (i=0; i<data.length; i++)
 		{
+
+			for (var keyData in data[i])
+			{
+				console.log( "data [ " + i  +' ] [' + keyData + " ] = " + data[i][keyData]);
+			}
+
+			/** Revist this section of code when working on the ETA.
 			if(key ==='orders')
 			{
-				var order = collectionDriver.getOneByGivenCriteria(key, app.get('sheet_uniqueid_column_name'), data[i][app.get('sheet_uniqueid_column_name')]);
-				if(order)
+				 collectionDriver.getOneByGivenCriteria(key, app.get('sheet_uniqueid_column_name'), data[i][app.get('sheet_uniqueid_column_name')], function(err, order){
+				if(err)
+				{
+
+					console.log("Something wrong there is no orders object for given " + data[i][app.get('sheet_uniqueid_column_name')])
+					data[i].lastETAUpdateDateTime = new Date();
+
+				}
+				else
 				{
 					var previousETA= order.ETA;
 					var previousETAUpdateDateTime = order.lastETAUpdateDateTime;
@@ -64,15 +80,12 @@ app.put('/sheetSync', function(req, res)
 					console.log('previousETAUpdateDateTime = ' + previousETAUpdateDateTime);
 
 				}
-				else
-				{
-					console.log("Something wrong there is no orders object for given " + data[i][app.get('sheet_uniqueid_column_name')])
-					data[i].lastETAUpdateDateTime = new Date();
 
-				}
+				});
+
 
 			}
-
+**/
 
 		   	collectionDriver.upsert(key, data[i], app.get('sheet_uniqueid_column_name') ,function(err,docs) 
 		   	{

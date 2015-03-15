@@ -26,35 +26,45 @@ CollectionDriver.prototype.findAll = function(collectionName, callback) {
 
 
 //find a specific object
-CollectionDriver.prototype.getOneByGivenCriteria = function(collectionName, searchKey,  serchvalue) { 
-  var  the_collection =  this.getCollection(collectionName)
-              console.log('collectionName = ' + the_collection);
+CollectionDriver.prototype.getOneByGivenCriteria = function(collectionName, searchKey,  serchvalue, callback) 
+{ 
 
-            console.log('collectionName = ' + collectionName);
-            console.log('searchKey = ' + searchKey);
-            console.log('serchvalue = ' + serchvalue);
-            return the_collection.findOne({searchKey:serchvalue});
+        console.log('collectionName = ' + collectionName);
+        console.log('searchKey = ' + searchKey);
+        console.log('serchvalue = ' + serchvalue);
 
-           // the_collection.findOne({searchKey:serchvalue}, function(error,doc) { 
-             //   if (error)
-               // {
-             //       console.log('Trouble getting the data...');
-             //   } 
-              //  else 
-               //     {
-               //         return  doc;
-               //     }
-          //  });
-        
-    //});
+
+
+    this.getCollection(collectionName, function(error, the_collection) {
+        if (error) 
+          {
+            console.log("getOneByGivenCriteria: " + error);
+            callback(error);
+          }
+        else {
+
+          console.log('collectionName = ' + the_collection);
+
+          the_collection.findOne({searchKey:serchvalue},function(error,doc) { 
+              if (error) 
+              callback(error)
+              else callback(null, doc);
+            });
+
+        }
+    });
+
 }
 
 
 //find a specific object
-CollectionDriver.prototype.get = function(collectionName, id, callback) { 
-    this.getCollection(collectionName, function(error, the_collection) {
+CollectionDriver.prototype.get = function(collectionName, id, callback) 
+{ 
+    this.getCollection(collectionName, function(error, the_collection) 
+    {
         if (error) callback(error)
-        else {
+        else 
+        {
             var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$"); 
             if (!checkForHexRegExp.test(id)) callback({error: "invalid id"});
             else the_collection.findOne({'_id':ObjectID(id)}, function(error,doc) { 
